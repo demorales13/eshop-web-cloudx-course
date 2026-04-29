@@ -1,6 +1,10 @@
-﻿using BlazorShared;
+﻿using System;
+
+using BlazorShared;
+
 using FastEndpoints;
 using FastEndpoints.Swagger;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.eShopWeb.Infrastructure;
@@ -12,9 +16,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using NimblePros.Metronome;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddApplicationInsightsTelemetry();
 
 // Add service defaults & Aspire components.
 builder.AddAspireServiceDefaults();
@@ -58,6 +66,7 @@ builder.AddSeqEndpoint(connectionName: "seq", options =>
 {
     options.ServerUrl = seqUrl;
 });
+
 
 var app = builder.Build();
 

@@ -1,0 +1,13 @@
+CatalogBaseUrl: ""
+baseUrls__apiBase: ""
+UseOnlyInMemoryDatabase: true
+ConnectionStrings__CatalogConnection:
+ConnectionStrings__IdentityConnection:
+
+
+se debe desplegar una bd para cada servicio: una para CatalogDb y otro para IdentityDb
+Usar un servidor B3 para el AppService
+
+
+demouser@microsoft.com
+Pass@word1

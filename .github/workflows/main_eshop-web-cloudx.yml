@@ -27,13 +27,13 @@ jobs:
         run: dotnet build src/Web/Web.csproj --configuration Release
 
       - name: Publish Web project
-        run: dotnet publish src/Web/Web.csproj --configuration Release
+        run: dotnet publish src/Web/Web.csproj --configuration Release --output "${{ runner.temp }}/webapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{ runner.temp }}/webapp
 
   deploy:
     runs-on: windows-latest

@@ -10,7 +10,7 @@ using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 public class OrderItemsReserverService : IOrderItemsReserverService
 {
     private readonly ServiceBusClient _client;
-    private readonly string _queueName = "order-items-reservation";
+    private readonly string _queueName = "order-reservations";
 
     public OrderItemsReserverService(ServiceBusClient client)
     {

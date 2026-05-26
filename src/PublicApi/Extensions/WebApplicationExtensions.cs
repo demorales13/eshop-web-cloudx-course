@@ -13,7 +13,7 @@ public static class WebApplicationExtensions
 {
     public static async Task SeedDatabaseAsync(this WebApplication app)
     {
-        app.Logger.LogInformation("Seeding Database...");
+        app.Logger.LogInformation("Seeding Database ...  ... ... ...");
 
         using var scope = app.Services.CreateScope();
         var scopedProvider = scope.ServiceProvider;

@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.eShopWeb.Infrastructure.Identity
+@using Microsoft.Extensions.Configuration
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IConfiguration Configuration
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -32,6 +38,17 @@
                         <a asp-area="" asp-page="/Index">
                             <img src="~/images/brand.png" alt="eShop On Web" />
                         </a>
+                        @{
+                            var instanceName = Configuration["InstanceName"] ?? "Unknown";
+                            var badgeColor = instanceName switch
+                            {
+                                "Production" => "danger",
+                                "Staging" => "warning",
+                                "Secondary" => "info",
+                                _ => "secondary"
+                            };
+                        }
+                        <span class="badge badge-@badgeColor" style="margin-left: 10px; font-size: 0.9em; vertical-align: middle;">@instanceName</span>
                     </section>
                     <partial name="_LoginPartial" />
                 </article>

@@ -30,8 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7EFE7D65-5C2D-4D83-B034-D06B2D37564E}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		docker-compose.yml = docker-compose.yml
 		environment variables.txt = environment variables.txt
-		.github\workflows\main_eshop-cloudx.yml = .github\workflows\main_eshop-cloudx.yml
+		.github\workflows\main_eshop-web-cloudx-secondary.yml = .github\workflows\main_eshop-web-cloudx-secondary.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

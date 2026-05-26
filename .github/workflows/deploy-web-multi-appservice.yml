@@ -84,9 +84,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5D28DF1F98164CFA96739BA8630A8E40 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_52420D46679D4FACA81BA026DDE989B7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FD43EBB93932436D93AB5D9DF971EFFC }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C02B3A4DE7AB4A1EA392E7970ED6537C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8430ED147A6D44CAB6EC9C8716983C66 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F4F32706FE7443B1A44548E72143B982 }}
 
       - name: Deploy to eshop-web-cloudx-secondary
         uses: azure/webapps-deploy@v3

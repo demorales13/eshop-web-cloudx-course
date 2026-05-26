@@ -1,0 +1,124 @@
+# Unified workflow: Build once, deploy to multiple Azure App Services in parallel
+# Deploys src/Web/Web.csproj to 3 App Services
+
+name: Build and deploy Web to multiple Azure App Services
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/Web/**'
+      - '.github/workflows/deploy-web-multi-appservice.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Web artifact
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Build Web project
+        run: dotnet build src/Web/Web.csproj --configuration Release
+
+      - name: Publish Web project
+        run: dotnet publish src/Web/Web.csproj --configuration Release --output "${{ runner.temp }}/webapp"
+
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-app-artifact
+          path: ${{ runner.temp }}/webapp
+
+  deploy-eshop-cloudx:
+    name: Deploy to eshop-cloudx (Production)
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: web-app-artifact
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D119954E845A4E63A6FCD98A2351BD6A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4209A09120A54FB495381A20245E1BE7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0707CBC7DCD04163ACF3798BF038A037 }}
+
+      - name: Deploy to eshop-cloudx
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'eshop-cloudx'
+          slot-name: 'Production'
+          package: .
+
+  deploy-eshop-web-cloudx:
+    name: Deploy to eshop-web-cloudx (staging)
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: web-app-artifact
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5D28DF1F98164CFA96739BA8630A8E40 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_52420D46679D4FACA81BA026DDE989B7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FD43EBB93932436D93AB5D9DF971EFFC }}
+
+      - name: Deploy to eshop-web-cloudx
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'eshop-web-cloudx'
+          slot-name: 'staging'
+          package: .
+
+  deploy-eshop-web-cloudx-secondary:
+    name: Deploy to eshop-web-cloudx-secondary (Production)
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: web-app-artifact
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C1AFC4D0E0834A7790B1283DEA63C3A9 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_34F6CF29535A4674A8F8E1EFD843931D }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BA85828DE8A14F228EFE928419A428FA }}
+
+      - name: Deploy to eshop-web-cloudx-secondary
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'eshop-web-cloudx-secondary'
+          slot-name: 'Production'
+          package: .

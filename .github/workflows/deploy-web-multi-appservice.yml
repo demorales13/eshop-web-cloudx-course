@@ -39,34 +39,6 @@ jobs:
           name: web-app-artifact
           path: ${{ runner.temp }}/webapp
 
-  deploy-eshop-cloudx:
-    name: Deploy to eshop-cloudx (Production)
-    runs-on: windows-latest
-    needs: build
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: web-app-artifact
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D119954E845A4E63A6FCD98A2351BD6A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4209A09120A54FB495381A20245E1BE7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0707CBC7DCD04163ACF3798BF038A037 }}
-
-      - name: Deploy to eshop-cloudx
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'eshop-cloudx'
-          slot-name: 'Production'
-          package: .
-
   deploy-eshop-web-cloudx:
     name: Deploy to eshop-web-cloudx (staging)
     runs-on: windows-latest

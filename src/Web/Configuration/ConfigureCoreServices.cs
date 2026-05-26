@@ -33,6 +33,17 @@ public static class ConfigureCoreServices
             services.AddScoped<IOrderItemsReserverService, OrderItemsReserverService>();
         }
 
+        var deliveryFunctionUrl = configuration["DeliveryFunctionUrl"];
+
+        if (!string.IsNullOrWhiteSpace(deliveryFunctionUrl))
+        {
+            services.AddHttpClient<IOrderItemsDeliveryService, OrderItemsDeliveryService>(client =>
+            {
+                client.BaseAddress = new Uri(deliveryFunctionUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+        }
+
 
         var catalogSettings = configuration.Get<CatalogSettings>() ?? new CatalogSettings();
         services.AddSingleton<IUriComposer>(new UriComposer(catalogSettings));

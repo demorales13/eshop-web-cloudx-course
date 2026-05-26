@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+
 using MediatR;
+
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Events;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -11,9 +13,9 @@ public class OrderCreatedHandler : INotificationHandler<OrderCreatedEvent>
 {
     private readonly ILogger<OrderCreatedHandler> _logger;
     private readonly IEmailSender _emailSender;
-    private readonly IOrderItemsReserverService? _reserverService;
+    private readonly IOrderItemsReserverService _reserverService;
 
-    public OrderCreatedHandler(ILogger<OrderCreatedHandler> logger, IEmailSender emailSender, IOrderItemsReserverService? reserverService = null)
+    public OrderCreatedHandler(ILogger<OrderCreatedHandler> logger, IEmailSender emailSender, IOrderItemsReserverService reserverService)
     {
         _logger = logger;
         _emailSender = emailSender;
@@ -28,13 +30,6 @@ public class OrderCreatedHandler : INotificationHandler<OrderCreatedEvent>
                                          "Order Created",
                                          $"Order with id {domainEvent.Order.Id} was created.");
 
-        if (_reserverService != null)
-        {
-            await _reserverService.ReserveAsync(domainEvent.Order);
-        }
-        else
-        {
-            _logger.LogWarning("OrderItemsReserverService not configured. Skipping item reservation for order #{orderId}", domainEvent.Order.Id);
-        }
+        await _reserverService.ReserveAsync(domainEvent.Order);
     }
 }
